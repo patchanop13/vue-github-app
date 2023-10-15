@@ -19,3 +19,19 @@ jobs:
         with:
           name: dist-production
           path: dist
+
+  deploy-to-production:
+    needs: build-production-job
+    runs-on: ubuntu-latest
+    steps:
+      - uses : actions/upload-artifact@v3
+      with:
+        name: dist-production
+        path: dist
+      - run: ls dist
+      - uses: actions/checkout@v4
+      - uses: SerhiiKa/VuePagesAction@1.0.4
+        with:
+          username: ${{ github.actor }}
+          reponame: ${{ github.event.repository.name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
